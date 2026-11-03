@@ -1,0 +1,1008 @@
+<!DOCTYPE html>
+<html lang="id" class="scroll-smooth">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Platform Literasi Digital - Informatika Kelas X Kurikulum Merdeka</title>
+    <!-- Tailwind CSS CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+    <!-- Canvas Confetti CDN -->
+    <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.6.0/dist/confetti.browser.min.js"></script>
+    <!-- Google Fonts Inter -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        brand: {
+                            50: '#eff6ff',
+                            100: '#dbeafe',
+                            500: '#3b82f6',
+                            600: '#2563eb',
+                            700: '#1d4ed8',
+                            800: '#1e40af',
+                            900: '#1e3a8a',
+                        }
+                    },
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom Styles & CSS Animations */
+        @keyframes pulse-slow {
+            0%, 100% { transform: scale(1); opacity: 1; }
+            50% { transform: scale(1.03); opacity: 0.9; }
+        }
+        .animate-pulse-slow {
+            animation: pulse-slow 3s infinite ease-in-out;
+        }
+        .glass-card {
+            background: rgba(255, 255, 255, 0.9);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(226, 232, 240, 0.8);
+        }
+        /* Print Stylesheet for LKPD */
+        @media print {
+            body * {
+                visibility: hidden;
+            }
+            #print-area, #print-area * {
+                visibility: visible;
+            }
+            #print-area {
+                position: absolute;
+                left: 0;
+                top: 0;
+                width: 100%;
+                color: #000 !important;
+                background: #fff !important;
+                padding: 20px;
+            }
+            .no-print {
+                display: none !important;
+            }
+        }
+    </style>
+</head>
+<body class="bg-slate-900 text-slate-100 font-sans min-h-screen flex flex-col antialiased selection:bg-indigo-500 selection:text-white">
+
+    <!-- TOP HEADER / NAVBAR -->
+    <header class="sticky top-0 z-50 bg-slate-900/95 backdrop-blur-md border-b border-slate-800 shadow-xl no-print">
+        <div class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div class="flex items-center justify-between h-20">
+                <!-- Logo & Title -->
+                <div class="flex items-center gap-3">
+                    <div class="w-12 h-12 rounded-2xl bg-gradient-to-tr from-indigo-600 via-violet-600 to-pink-500 flex items-center justify-center text-white shadow-lg shadow-indigo-500/30">
+                        <i class="fa-solid me-0.5 fa-shield-halved text-2xl"></i>
+                    </div>
+                    <div>
+                        <div class="flex items-center gap-2">
+                            <h1 class="text-xl font-extrabold text-transparent bg-clip-text bg-gradient-to-r from-white via-slate-200 to-indigo-300">
+                                DIGILIT X
+                            </h1>
+                            <span class="px-2 py-0.5 text-xs font-semibold bg-indigo-500/20 text-indigo-300 border border-indigo-500/30 rounded-full">Kurikulum Merdeka</span>
+                        </div>
+                        <p class="text-xs text-slate-400">Literasi Digital • Informatika Kelas X (2 JP)</p>
+                    </div>
+                </div>
+
+                <!-- Deep Learning Approach Badges -->
+                <div class="hidden lg:flex items-center gap-2 text-xs">
+                    <span class="px-3 py-1.5 rounded-xl bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-medium flex items-center gap-1.5">
+                        <i class="fa-solid fa-brain"></i> Mindful
+                    </span>
+                    <span class="px-3 py-1.5 rounded-xl bg-blue-500/10 text-blue-400 border border-blue-500/20 font-medium flex items-center gap-1.5">
+                        <i class="fa-solid fa-heart"></i> Meaningful
+                    </span>
+                    <span class="px-3 py-1.5 rounded-xl bg-amber-500/10 text-amber-400 border border-amber-500/20 font-medium flex items-center gap-1.5">
+                        <i class="fa-solid fa-face-smile"></i> Joyful
+                    </span>
+                </div>
+            </div>
+
+            <!-- NAVIGATION TABS -->
+            <nav class="flex space-x-2 overflow-x-auto pb-3 pt-1 no-scrollbar text-sm font-medium border-t border-slate-800/80">
+                <button onclick="switchTab('materi')" id="tab-btn-materi" class="tab-btn active px-4 py-2.5 rounded-xl flex items-center gap-2 whitespace-nowrap transition-all duration-200 bg-indigo-600 text-white shadow-lg shadow-indigo-600/30">
+                    <i class="fa-solid fa-book-open"></i> 1. Materi Ajar (2 JP)
+                </button>
+                <button onclick="switchTab('lab')" id="tab-btn-lab" class="tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 whitespace-nowrap transition-all duration-200 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60">
+                    <i class="fa-solid fa-flask"></i> 2. Lab Maya Detektor
+                </button>
+                <button onclick="switchTab('game')" id="tab-btn-game" class="tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 whitespace-nowrap transition-all duration-200 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60">
+                    <i class="fa-solid fa-gamepad"></i> 3. Game Buster
+                </button>
+                <button onclick="switchTab('lkpd')" id="tab-btn-lkpd" class="tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 whitespace-nowrap transition-all duration-200 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60">
+                    <i class="fa-solid fa-file-pen"></i> 4. LKPD Interaktif
+                </button>
+                <button onclick="switchTab('refleksi')" id="tab-btn-refleksi" class="tab-btn px-4 py-2.5 rounded-xl flex items-center gap-2 whitespace-nowrap transition-all duration-200 text-slate-400 hover:text-slate-200 hover:bg-slate-800/60">
+                    <i class="fa-solid fa-sparkles text-amber-400"></i> 5. Refleksi 3-2-1
+                </button>
+            </nav>
+        </div>
+    </header>
+
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-grow max-w-7xl w-full mx-auto px-4 sm:px-6 lg:px-8 py-8">
+
+        <!-- =================================================================== -->
+        <!-- MODUL 1: MATERI AJAR INTERAKTIF -->
+        <!-- =================================================================== -->
+        <section id="tab-materi" class="tab-content block space-y-8 animate-fadeIn">
+            <!-- Hero Banner -->
+            <div class="relative overflow-hidden rounded-3xl bg-gradient-to-r from-indigo-900 via-slate-900 to-violet-950 p-8 border border-indigo-500/20 shadow-2xl">
+                <div class="relative z-10 max-w-3xl">
+                    <div class="inline-flex items-center gap-2 px-3 py-1 rounded-full bg-indigo-500/10 border border-indigo-400/30 text-indigo-300 text-xs font-semibold mb-4">
+                        <i class="fa-solid fa-bullseye"></i> Alur Pemahaman Deep Learning
+                    </div>
+                    <h2 class="text-3xl sm:text-4xl font-extrabold text-white tracking-tight mb-4">
+                        Menjadi Warga Digital Cerdas, Etis, & Aman di Era AI
+                    </h2>
+                    <p class="text-slate-300 text-sm sm:text-base leading-relaxed mb-6">
+                        Di era serba digital, setiap klik, bagikan, dan komentar meninggalkan jejak. Pelajari 4 Pilar Utama Literasi Digital untuk melindungi diri dari ancaman siber dan penipuan online.
+                    </p>
+                    <div class="flex flex-wrap gap-4 text-xs font-medium text-slate-300">
+                        <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-2 rounded-lg border border-slate-700">
+                            <i class="fa-regular fa-clock text-indigo-400"></i> Alokasi Waktu: 2 JP (2 x 45 Menit)
+                        </div>
+                        <div class="flex items-center gap-2 bg-slate-800/80 px-3 py-2 rounded-lg border border-slate-700">
+                            <i class="fa-solid fa-graduation-cap text-indigo-400"></i> Capaian Pembelajaran: BK-K10-01
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 4 Pilar Literasi Digital Cards -->
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                <!-- Pilar 1 -->
+                <div class="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/60 hover:border-indigo-500/50 transition duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-blue-500/20 text-blue-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-laptop-code"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Digital Skills</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Kemampuan dasar menggunakan perangkat keras, software, platform digital, serta mesin pencari secara efektif.
+                    </p>
+                </div>
+
+                <!-- Pilar 2 -->
+                <div class="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/60 hover:border-emerald-500/50 transition duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-emerald-500/20 text-emerald-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-shield-virus"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Digital Safety</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Perlindungan data pribadi, keamanan kata sandi, mengenali phishing, serta proteksi dari kejahatan siber.
+                    </p>
+                </div>
+
+                <!-- Pilar 3 -->
+                <div class="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/60 hover:border-amber-500/50 transition duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-amber-500/20 text-amber-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-heart-handshake"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Digital Culture</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Membangun wawasan kebangsaan, Pancasila, dan kebhinekaan dalam berinteraksi di ruang digital.
+                    </p>
+                </div>
+
+                <!-- Pilar 4 -->
+                <div class="bg-slate-800/60 rounded-2xl p-6 border border-slate-700/60 hover:border-purple-500/50 transition duration-300 group">
+                    <div class="w-12 h-12 rounded-xl bg-purple-500/20 text-purple-400 flex items-center justify-center text-xl mb-4 group-hover:scale-110 transition">
+                        <i class="fa-solid fa-scale-balanced"></i>
+                    </div>
+                    <h3 class="text-lg font-bold text-white mb-2">Digital Ethics</h3>
+                    <p class="text-slate-400 text-xs leading-relaxed">
+                        Tata krama berinternet (Netiket), tidak menyebarkan kebencian, serta menghargai hak cipta orang lain.
+                    </p>
+                </div>
+            </div>
+
+            <!-- Real-World Case Studies Accordion -->
+            <div class="bg-slate-800/40 rounded-3xl p-6 sm:p-8 border border-slate-700/80">
+                <div class="flex items-center gap-3 mb-6">
+                    <div class="p-3 bg-red-500/20 text-red-400 rounded-xl">
+                        <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+                    </div>
+                    <div>
+                        <h3 class="text-xl font-bold text-white">Studi Kasus Dunia Nyata (Analisis Problem Based)</h3>
+                        <p class="text-xs text-slate-400">Klik kasus di bawah untuk membedah solusi dan pencegahannya.</p>
+                    </div>
+                </div>
+
+                <div class="space-y-4">
+                    <!-- Case 1 -->
+                    <div class="border border-slate-700 rounded-2xl overflow-hidden bg-slate-900/50">
+                        <button onclick="toggleAccordion('case-1')" class="w-full px-6 py-4 text-left flex justify-between items-center font-semibold text-slate-200 hover:bg-slate-800/50 transition">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-full bg-indigo-500/20 text-indigo-400 text-xs flex items-center justify-center">1</span>
+                                Modus File APK Kurir Paket / Undangan Pernikahan Palsu
+                            </span>
+                            <i id="case-1-icon" class="fa-solid fa-chevron-down text-slate-400 transition-transform"></i>
+                        </button>
+                        <div id="case-1" class="hidden px-6 pb-6 text-sm text-slate-300 border-t border-slate-800/80 pt-4 space-y-3">
+                            <p><strong class="text-indigo-400">Skenario:</strong> Seseorang menerima pesan WhatsApp dari nomor tak dikenal yang mengaku kurir paket. Mengirimkan file bertuliskan <em>LIHAT_Foto_Paket.apk</em>.</p>
+                            <p><strong class="text-emerald-400">Bahaya:</strong> File APK ini berisi Malware Sniffer yang mampu membaca SMS verifikasi (OTP) dan menguras saldo bank/dompet digital korban secara dramatis.</p>
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-xs space-y-1">
+                                <p class="text-amber-300 font-bold">💡 Langkah Pencegahan:</p>
+                                <ul class="list-disc list-inside space-y-1 text-slate-300">
+                                    <li>Jangan pernah unduh/install file berekstensi <strong>.APK</strong> di luar Google PlayStore / AppStore.</li>
+                                    <li>Periksa izin akses (Permission) aplikasi di smartphone secara berkala.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Case 2 -->
+                    <div class="border border-slate-700 rounded-2xl overflow-hidden bg-slate-900/50">
+                        <button onclick="toggleAccordion('case-2')" class="w-full px-6 py-4 text-left flex justify-between items-center font-semibold text-slate-200 hover:bg-slate-800/50 transition">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-full bg-indigo-500/20 text-indigo-400 text-xs flex items-center justify-center">2</span>
+                                Bahaya Oversharing & Jejak Digital Pasif
+                            </span>
+                            <i id="case-2-icon" class="fa-solid fa-chevron-down text-slate-400 transition-transform"></i>
+                        </button>
+                        <div id="case-2" class="hidden px-6 pb-6 text-sm text-slate-300 border-t border-slate-800/80 pt-4 space-y-3">
+                            <p><strong class="text-indigo-400">Skenario:</strong> Mengunggah foto KTP, tiket pesawat dengan QR Code, atau posting lokasi rumah secara real-time di Media Sosial.</p>
+                            <p><strong class="text-emerald-400">Bahaya:</strong> Data NIK, Tanggal Lahir, dan Nama Ibu Kandung dapat disalahgunakan oleh pihak jahat untuk pinjaman online ilegal (Pinjol) atau kejahatan Social Engineering.</p>
+                            <div class="bg-slate-800 p-4 rounded-xl border border-slate-700 text-xs space-y-1">
+                                <p class="text-amber-300 font-bold">💡 Langkah Pencegahan:</p>
+                                <ul class="list-disc list-inside space-y-1 text-slate-300">
+                                    <li>Terapkan prinsip <em>Think Before You Post</em>. Sensor data krusial sebelum posting.</li>
+                                    <li>Aktifkan Autentikasi Dua Faktor (2FA) di semua akun medsos kamu.</li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Case 3 -->
+                    <div class="border border-slate-700 rounded-2xl overflow-hidden bg-slate-900/50">
+                        <button onclick="toggleAccordion('case-3')" class="w-full px-6 py-4 text-left flex justify-between items-center font-semibold text-slate-200 hover:bg-slate-800/50 transition">
+                            <span class="flex items-center gap-3">
+                                <span class="w-7 h-7 rounded-full bg-indigo-500/20 text-indigo-400 text-xs flex items-center justify-center">3</span>
+                                Metode Saring Sebelum Sharing (Rumus CRAAP Test)
+                            </span>
+                            <i id="case-3-icon" class="fa-solid fa-chevron-down text-slate-400 transition-transform"></i>
+                        </button>
+                        <div id="case-3" class="hidden px-6 pb-6 text-sm text-slate-300 border-t border-slate-800/80 pt-4 space-y-3">
+                            <p>Untuk menguji kredibilitas informasi atau berita hoaks, gunakan metode <strong>CRAAP</strong>:</p>
+                            <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
+                                <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                                    <strong class="text-indigo-400 block mb-1">C - Currency (Kebaruan)</strong>
+                                    Apakah beritanya baru atau berita lama yang diunggah ulang untuk adu domba?
+                                </div>
+                                <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                                    <strong class="text-indigo-400 block mb-1">R - Relevance (Kesesuaian)</strong>
+                                    Apakah judul berita klikbait dan tidak sesuai isi artikel?
+                                </div>
+                                <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                                    <strong class="text-indigo-400 block mb-1">A - Authority (Otoritas)</strong>
+                                    Apakah sumber berasal dari media resmi terverifikasi Dewan Pers?
+                                </div>
+                                <div class="bg-slate-800 p-3 rounded-lg border border-slate-700">
+                                    <strong class="text-indigo-400 block mb-1">P - Purpose (Tujuan)</strong>
+                                    Apakah bertujuan memicu provokasi, kebencian, atau jualan?
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =================================================================== -->
+        <!-- MODUL 2: LAB MAYA (SIMULASI DETEKTOR PHISHING & HOAX) -->
+        <!-- =================================================================== -->
+        <section id="tab-lab" class="tab-content hidden space-y-8 animate-fadeIn">
+            <div class="bg-gradient-to-r from-blue-900/60 via-indigo-900/40 to-slate-900 p-6 sm:p-8 rounded-3xl border border-blue-500/30">
+                <div class="flex items-center gap-3 mb-2">
+                    <span class="px-3 py-1 bg-blue-500/20 text-blue-300 text-xs font-semibold rounded-full border border-blue-500/30">Virtual Laboratory</span>
+                    <h2 class="text-2xl font-bold text-white">Lab Maya: Security & Hoax Inspector</h2>
+                </div>
+                <p class="text-slate-300 text-sm">
+                    Uji dan analisis pesan, link URL, atau email secara aman. Temukan indikator bahaya siber sebelum kamu menjadi korban berikutnya!
+                </p>
+            </div>
+
+            <div class="grid grid-cols-1 lg:grid-cols-12 gap-8">
+                <!-- Left: Control & Preset Samples -->
+                <div class="lg:col-span-5 space-y-4">
+                    <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Pilih Skenario Pesan Masuk:</h3>
+                    
+                    <button onclick="inspectSample(1)" class="w-full text-left p-4 rounded-2xl bg-slate-800/80 border border-slate-700 hover:border-indigo-500 transition group flex items-start gap-3">
+                        <div class="p-2.5 bg-emerald-500/10 text-emerald-400 rounded-xl group-hover:scale-105 transition">
+                            <i class="fa-brands fa-whatsapp text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-indigo-400 block mb-0.5">Skenario #1 (WhatsApp)</span>
+                            <h4 class="text-sm font-semibold text-slate-200">Undian Berhadiah Bank BCA</h4>
+                            <p class="text-xs text-slate-400 line-clamp-1">"Selamat! No WA Anda memenangkan Gebyar BCA 50jt..."</p>
+                        </div>
+                    </button>
+
+                    <button onclick="inspectSample(2)" class="w-full text-left p-4 rounded-2xl bg-slate-800/80 border border-slate-700 hover:border-indigo-500 transition group flex items-start gap-3">
+                        <div class="p-2.5 bg-red-500/10 text-red-400 rounded-xl group-hover:scale-105 transition">
+                            <i class="fa-solid fa-envelope-open-text text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-indigo-400 block mb-0.5">Skenario #2 (Email Phishing)</span>
+                            <h4 class="text-sm font-semibold text-slate-200">Verifikasi Keamanan Akun Google</h4>
+                            <p class="text-xs text-slate-400 line-clamp-1">"Akun Anda akan diblokir dalam 24 jam! Verifikasi kata sandi..."</p>
+                        </div>
+                    </button>
+
+                    <button onclick="inspectSample(3)" class="w-full text-left p-4 rounded-2xl bg-slate-800/80 border border-slate-700 hover:border-indigo-500 transition group flex items-start gap-3">
+                        <div class="p-2.5 bg-amber-500/10 text-amber-400 rounded-xl group-hover:scale-105 transition">
+                            <i class="fa-solid fa-newspaper text-xl"></i>
+                        </div>
+                        <div>
+                            <span class="text-xs font-bold text-indigo-400 block mb-0.5">Skenario #3 (Berita Viral)</span>
+                            <h4 class="text-sm font-semibold text-slate-200">Ketan Hitam Menyembuhkan Virus</h4>
+                            <p class="text-xs text-slate-400 line-clamp-1">"Sebarkan sebelum dihapus! Dokter Jepang temukan resep..."</p>
+                        </div>
+                    </button>
+
+                    <div class="pt-4 border-t border-slate-800">
+                        <label class="block text-xs font-bold text-slate-400 mb-2">Atau Analisis Tautan / Teks Bebas Kamu:</label>
+                        <textarea id="custom-input" rows="3" class="w-full bg-slate-900 border border-slate-700 rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-indigo-500" placeholder="Paste tautan atau isi pesan yang ingin kamu periksa di sini..."></textarea>
+                        <button onclick="analyzeCustomText()" class="mt-2 w-full py-2.5 bg-indigo-600 hover:bg-indigo-500 text-white font-semibold text-xs rounded-xl shadow-lg transition flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-microscope"></i> Jalankan Inspeksi Sistem
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Right: Inspector Diagnostics View -->
+                <div class="lg:col-span-7 bg-slate-900/90 rounded-3xl p-6 sm:p-8 border border-slate-800 relative">
+                    <div id="lab-empty-state" class="text-center py-16 space-y-4">
+                        <div class="w-16 h-16 rounded-full bg-slate-800 flex items-center justify-center mx-auto text-slate-500 text-2xl">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+                        <h4 class="text-slate-400 text-sm font-medium">Pilih skenario di sebelah kiri untuk menguji analisis laboratorium.</h4>
+                    </div>
+
+                    <div id="lab-result-card" class="hidden space-y-6">
+                        <!-- Risk Header -->
+                        <div class="flex items-center justify-between pb-4 border-b border-slate-800">
+                            <div>
+                                <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Hasil Analisis Keamanan</span>
+                                <h3 id="res-title" class="text-xl font-bold text-white">...</h3>
+                            </div>
+                            <span id="res-badge" class="px-4 py-1.5 rounded-full text-xs font-extrabold tracking-wide uppercase">
+                                ...
+                            </span>
+                        </div>
+
+                        <!-- Sample Content Box -->
+                        <div class="bg-slate-950 p-4 rounded-xl border border-slate-800 font-mono text-xs text-slate-300 whitespace-pre-wrap leading-relaxed" id="res-content">
+                            ...
+                        </div>
+
+                        <!-- Safety Score Gauge Bar -->
+                        <div class="space-y-2">
+                            <div class="flex justify-between text-xs font-bold">
+                                <span class="text-slate-400">Tingkat Risiko Bahaya:</span>
+                                <span id="res-risk-percentage" class="text-red-400">85% RISK</span>
+                            </div>
+                            <div class="w-full bg-slate-800 rounded-full h-3 overflow-hidden">
+                                <div id="res-risk-bar" class="bg-gradient-to-r from-yellow-500 to-red-600 h-full w-0 transition-all duration-700"></div>
+                            </div>
+                        </div>
+
+                        <!-- Breakdown Flags -->
+                        <div class="space-y-3">
+                            <h4 class="text-xs font-bold text-slate-300 uppercase">Anomali & Indikator Terdeteksi:</h4>
+                            <div id="res-flags-list" class="space-y-2 text-xs">
+                                <!-- Dynamic Flags inserted here -->
+                            </div>
+                        </div>
+
+                        <!-- Recommendation Box -->
+                        <div class="p-4 rounded-2xl bg-indigo-950/40 border border-indigo-500/30 flex items-start gap-3">
+                            <i class="fa-solid fa-lightbulb text-indigo-400 text-lg mt-0.5"></i>
+                            <div>
+                                <strong class="text-xs text-indigo-300 block mb-0.5">Tindakan Rekomendasi:</strong>
+                                <p id="res-recommendation" class="text-xs text-slate-300 leading-relaxed">...</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =================================================================== -->
+        <!-- MODUL 3: GAME EDUKASI (HOAX & PHISHING BUSTER) -->
+        <!-- =================================================================== -->
+        <section id="tab-game" class="tab-content hidden space-y-6 animate-fadeIn">
+            <div class="bg-gradient-to-r from-purple-900 via-indigo-950 to-slate-900 rounded-3xl p-6 sm:p-8 border border-purple-500/30 text-center relative overflow-hidden">
+                <span class="px-3 py-1 bg-purple-500/20 text-purple-300 text-xs font-semibold rounded-full border border-purple-500/30 mb-3 inline-block">
+                    Joyful Interactive Game
+                </span>
+                <h2 class="text-3xl font-black text-white">Hoax & Phishing Buster 🛡️</h2>
+                <p class="text-slate-300 text-sm max-w-xl mx-auto mt-2">
+                    Uji kecepatan reaksi dan pemahamanmu! Saring setiap informasi yang masuk: Apakah **FAKTA / AMAN** atau **HOAKS / PHISHING**?
+                </p>
+            </div>
+
+            <!-- Game Interface Box -->
+            <div class="max-w-2xl mx-auto bg-slate-900 rounded-3xl border border-slate-800 p-6 shadow-2xl relative">
+                <!-- Top Status Bar -->
+                <div class="flex justify-between items-center bg-slate-950 p-4 rounded-2xl border border-slate-800 mb-6">
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-trophy text-amber-400"></i>
+                        <span class="text-xs text-slate-400 font-bold uppercase">Skor:</span>
+                        <span id="game-score" class="text-lg font-black text-white">0</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-heart text-red-500 animate-pulse"></i>
+                        <span class="text-xs text-slate-400 font-bold uppercase">Nyawa:</span>
+                        <span id="game-lives" class="text-lg font-black text-red-400">3</span>
+                    </div>
+                    <div class="flex items-center gap-2">
+                        <i class="fa-solid fa-bolt text-indigo-400"></i>
+                        <span class="text-xs text-slate-400 font-bold uppercase">Combo:</span>
+                        <span id="game-combo" class="text-lg font-black text-indigo-300">0x</span>
+                    </div>
+                </div>
+
+                <!-- Game Active Screen -->
+                <div id="game-screen" class="min-h-[260px] flex flex-col justify-between items-center text-center p-6 bg-slate-950/60 rounded-2xl border border-slate-800 relative">
+                    <div class="w-full">
+                        <span id="card-category" class="px-3 py-1 bg-slate-800 text-indigo-400 text-xs font-bold rounded-full border border-slate-700 uppercase tracking-wider mb-4 inline-block">
+                            Sosial Media Post
+                        </span>
+                        <p id="card-text" class="text-base sm:text-lg font-semibold text-slate-100 leading-relaxed my-4 min-h-[80px] flex items-center justify-center px-4">
+                            Klik "Mulai Permainan" untuk menguji ketangkasanmu!
+                        </p>
+                    </div>
+
+                    <!-- Instant Feedback Message overlay -->
+                    <div id="game-feedback" class="hidden my-2 py-2 px-4 rounded-xl text-xs font-bold"></div>
+
+                    <!-- Action Decision Buttons -->
+                    <div class="grid grid-cols-2 gap-4 w-full mt-4">
+                        <button onclick="submitChoice(false)" id="btn-hoax" disabled class="py-4 px-6 rounded-2xl bg-red-600/90 hover:bg-red-500 disabled:opacity-40 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-red-600/20 transition transform active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-xmark text-xl"></i> HOAKS / PHISHING
+                        </button>
+                        <button onclick="submitChoice(true)" id="btn-fakta" disabled class="py-4 px-6 rounded-2xl bg-emerald-600/90 hover:bg-emerald-500 disabled:opacity-40 text-white font-extrabold text-sm sm:text-base shadow-lg shadow-emerald-600/20 transition transform active:scale-95 flex items-center justify-center gap-2">
+                            <i class="fa-solid fa-check text-xl"></i> FAKTA / AMAN
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Start / Restart Overlay Controls -->
+                <div class="mt-6 text-center">
+                    <button id="btn-start-game" onclick="startGame()" class="w-full py-4 bg-gradient-to-r from-indigo-600 to-violet-600 hover:from-indigo-500 hover:to-violet-500 text-white font-bold rounded-2xl shadow-xl shadow-indigo-600/30 transition transform hover:-translate-y-0.5">
+                        <i class="fa-solid fa-play me-2"></i> Mulai Game Sekarang
+                    </button>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =================================================================== -->
+        <!-- MODUL 4: LKPD INTERAKTIF (LEMBAR KERJA PESERTA DIDIK) -->
+        <!-- =================================================================== -->
+        <section id="tab-lkpd" class="tab-content hidden space-y-8 animate-fadeIn">
+            <!-- Header section for print & preview -->
+            <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 no-print">
+                <div>
+                    <h2 class="text-2xl font-bold text-white">LKPD Interaktif: Literasi Digital</h2>
+                    <p class="text-xs text-slate-400">Isi formulir identitas, jawab pertanyaan berbasis kasus, lalu unduh/cetak hasilnya.</p>
+                </div>
+                <button onclick="printLKPD()" class="px-5 py-2.5 bg-emerald-600 hover:bg-emerald-500 text-white font-semibold text-xs rounded-xl shadow-lg transition flex items-center gap-2">
+                    <i class="fa-solid fa-print"></i> Cetak / Simpan PDF LKPD
+                </button>
+            </div>
+
+            <!-- PRINTABLE LKPD FORM WRAPPER -->
+            <div id="print-area" class="bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-10 space-y-8 shadow-2xl">
+                <!-- Printable Document Header -->
+                <div class="border-b border-slate-800 pb-6 text-center sm:text-left flex flex-col sm:flex-row justify-between items-center gap-4">
+                    <div>
+                        <h3 class="text-2xl font-black text-indigo-400 tracking-tight">LEMBAR KERJA PESERTA DIDIK (LKPD)</h3>
+                        <p class="text-xs text-slate-400">Mata Pelajaran: Informatika | Topik: Literasi Digital & Keamanan Siber | Kelas X</p>
+                    </div>
+                    <div class="text-xs text-slate-400 text-right">
+                        <span>Kurikulum Merdeka</span><br>
+                        <span class="font-mono text-indigo-300">Waktu: 2 JP</span>
+                    </div>
+                </div>
+
+                <!-- Student Identity Fields -->
+                <div class="grid grid-cols-1 sm:grid-cols-3 gap-4 bg-slate-950/60 p-5 rounded-2xl border border-slate-800">
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">Nama Lengkap Siswa:</label>
+                        <input type="text" id="lkpd-nama" placeholder="Ketik nama kamu..." class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">Kelas / Rombel:</label>
+                        <select id="lkpd-kelas" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                            <option value="X-1">X-1 Informatika</option>
+                            <option value="X-2">X-2 Informatika</option>
+                            <option value="X-3">X-3 Informatika</option>
+                            <option value="X-4">X-4 Informatika</option>
+                        </select>
+                    </div>
+                    <div>
+                        <label class="block text-xs font-bold text-slate-400 mb-1">Kelompok Belajar:</label>
+                        <input type="text" id="lkpd-kelompok" placeholder="Misal: Kelompok 1 (Cyber Security)" class="w-full bg-slate-900 border border-slate-700 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <!-- Bagian A: Pilihan Ganda Pemahaman Konsep -->
+                <div class="space-y-6">
+                    <h4 class="text-sm font-bold text-indigo-400 uppercase tracking-wider border-b border-slate-800 pb-2">
+                        Bagian A: Uji Pemahaman Konsep (Pilihan Ganda)
+                    </h4>
+
+                    <!-- Question 1 -->
+                    <div class="space-y-3 bg-slate-950/40 p-4 rounded-2xl border border-slate-800">
+                        <p class="text-sm font-semibold text-slate-200">1. Tindakan berikut yang merupakan contoh pencegahan kejahatan Phishing adalah...</p>
+                        <div class="space-y-2 text-xs text-slate-300">
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900 border border-slate-800 cursor-pointer hover:bg-slate-800">
+                                <input type="radio" name="q1" value="A" class="text-indigo-600"> A. Membagikan kata sandi ke teman dekat untuk berjaga-jaga.
+                            </label>
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900 border border-slate-800 cursor-pointer hover:bg-slate-800">
+                                <input type="radio" name="q1" value="B" class="text-indigo-600"> B. Memeriksa detail alamat domain URL sebelum memasukkan data kredensial login.
+                            </label>
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900 border border-slate-800 cursor-pointer hover:bg-slate-800">
+                                <input type="radio" name="q1" value="C" class="text-indigo-600"> C. Mengunduh semua lampiran file APK dari pesan tidak dikenal.
+                            </label>
+                        </div>
+                    </div>
+
+                    <!-- Question 2 -->
+                    <div class="space-y-3 bg-slate-950/40 p-4 rounded-2xl border border-slate-800">
+                        <p class="text-sm font-semibold text-slate-200">2. Elemen utama dalam metode verifikasi berita hoaks dengan CRAAP Test, KECUALI...</p>
+                        <div class="space-y-2 text-xs text-slate-300">
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900 border border-slate-800 cursor-pointer hover:bg-slate-800">
+                                <input type="radio" name="q2" value="A" class="text-indigo-600"> A. Currency (Kebaruan Waktu)
+                            </label>
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900 border border-slate-800 cursor-pointer hover:bg-slate-800">
+                                <input type="radio" name="q2" value="B" class="text-indigo-600"> B. Popularity (Banyaknya Jumlah Like dan Share)
+                            </label>
+                            <label class="flex items-center gap-3 p-2.5 rounded-xl bg-slate-900 border border-slate-800 cursor-pointer hover:bg-slate-800">
+                                <input type="radio" name="q2" value="C" class="text-indigo-600"> C. Authority (Kredibilitas Sumber Penulis/Penerbit)
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bagian B: Analisis Kasus Esai -->
+                <div class="space-y-6">
+                    <h4 class="text-sm font-bold text-indigo-400 uppercase tracking-wider border-b border-slate-800 pb-2">
+                        Bagian B: Analisis Kasus & Solusi Problem Solving
+                    </h4>
+
+                    <div class="space-y-3">
+                        <label class="block text-xs font-bold text-slate-300">
+                            Studi Kasus: Teman sekelasmu menerima pesan WhatsApp dari nomor asing yang mengklaim diri sebagai panitia beasiswa dan meminta foto KTP serta nomor rekening orang tua. Apa langkah sistematis yang kamu sarankan untuk temanmu?
+                        </label>
+                        <textarea id="lkpd-essay-1" rows="4" placeholder="Tuliskan analisis dan langkah konkrit yang harus dilakukan..." class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 leading-relaxed"></textarea>
+                    </div>
+
+                    <div class="space-y-3">
+                        <label class="block text-xs font-bold text-slate-300">
+                            Studi Kasus Netiket: Mengapa membuat/menyebarkan meme bernada ejekan terhadap teman di media sosial termasuk pelanggaran etika siber dan bisa berdampak hukum?
+                        </label>
+                        <textarea id="lkpd-essay-2" rows="4" placeholder="Jelaskan alasan etis dan dampaknya terhadap psikologis korban..." class="w-full bg-slate-950 border border-slate-800 rounded-2xl p-4 text-xs text-slate-200 focus:outline-none focus:border-indigo-500 leading-relaxed"></textarea>
+                    </div>
+                </div>
+
+                <!-- Submit & Automatic Grade Summary -->
+                <div class="pt-4 border-t border-slate-800 flex flex-col sm:flex-row justify-between items-center gap-4 no-print">
+                    <button onclick="evaluateLKPD()" class="w-full sm:w-auto px-6 py-3 bg-indigo-600 hover:bg-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg transition">
+                        <i class="fa-solid fa-calculator me-1"></i> Evaluasi LKPD Saya
+                    </button>
+                    <div id="lkpd-score-result" class="hidden text-xs font-bold text-emerald-400 bg-emerald-500/10 border border-emerald-500/30 px-4 py-2 rounded-xl">
+                        Status LKPD: Siap Dikirim & Dicetak
+                    </div>
+                </div>
+            </div>
+        </section>
+
+
+        <!-- =================================================================== -->
+        <!-- MODUL 5: REFLEKSI DIRI (METODE 3-2-1 & EMOTICON SCALE) -->
+        <!-- =================================================================== -->
+        <section id="tab-refleksi" class="tab-content hidden space-y-8 animate-fadeIn">
+            <div class="bg-gradient-to-r from-amber-900/40 via-slate-900 to-indigo-900/40 p-6 sm:p-8 rounded-3xl border border-amber-500/30 text-center">
+                <span class="px-3 py-1 bg-amber-500/20 text-amber-300 text-xs font-semibold rounded-full border border-amber-500/30 mb-2 inline-block">
+                    Mindful Learning Reflection
+                </span>
+                <h2 class="text-3xl font-black text-white">Refleksi Diri 3-2-1 🪞</h2>
+                <p class="text-slate-300 text-sm max-w-xl mx-auto mt-1">
+                    Luangkan waktu sejenak untuk merenungkan apa yang telah kamu pelajari dan buat komitmen aksi nyata di dunia digital.
+                </p>
+            </div>
+
+            <!-- Self Assessment Emoticon Scale -->
+            <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 text-center space-y-4">
+                <h3 class="text-sm font-bold text-slate-300 uppercase tracking-wider">Bagaimana Tingkat Pemahaman & Perasaanmu Setelah Pembelajaran Ini?</h3>
+                <div class="flex justify-center items-center gap-4 sm:gap-8 pt-2">
+                    <button onclick="selectMood('sangat-paham')" class="mood-btn group flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-slate-800 transition">
+                        <span class="text-4xl transform group-hover:scale-125 transition">🤩</span>
+                        <span class="text-xs text-slate-400 font-semibold">Sangat Paham</span>
+                    </button>
+                    <button onclick="selectMood('paham')" class="mood-btn group flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-slate-800 transition">
+                        <span class="text-4xl transform group-hover:scale-125 transition">😊</span>
+                        <span class="text-xs text-slate-400 font-semibold">Paham</span>
+                    </button>
+                    <button onclick="selectMood('cukup')" class="mood-btn group flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-slate-800 transition">
+                        <span class="text-4xl transform group-hover:scale-125 transition">😐</span>
+                        <span class="text-xs text-slate-400 font-semibold">Cukup</span>
+                    </button>
+                    <button onclick="selectMood('bingung')" class="mood-btn group flex flex-col items-center gap-2 p-3 rounded-2xl hover:bg-slate-800 transition">
+                        <span class="text-4xl transform group-hover:scale-125 transition">😕</span>
+                        <span class="text-xs text-slate-400 font-semibold">Butuh Bantuan</span>
+                    </button>
+                </div>
+            </div>
+
+            <!-- 3-2-1 Reflection Form -->
+            <div class="bg-slate-900 rounded-3xl border border-slate-800 p-6 sm:p-8 space-y-6">
+                <!-- 3 Things Learned -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-amber-400 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-amber-500/20 text-amber-400 text-xs flex items-center justify-center">3</span>
+                        Tiga (3) Hal Baru yang Saya Pelajari Hari Ini:
+                    </h4>
+                    <div class="space-y-2">
+                        <input type="text" id="ref-3-1" placeholder="1. ..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+                        <input type="text" id="ref-3-2" placeholder="2. ..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+                        <input type="text" id="ref-3-3" placeholder="3. ..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500">
+                    </div>
+                </div>
+
+                <!-- 2 Things Confusing -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-indigo-400 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-indigo-500/20 text-indigo-400 text-xs flex items-center justify-center">2</span>
+                        Dua (2) Hal yang Masih Ingin Saya Didalami / tanyakan:
+                    </h4>
+                    <div class="space-y-2">
+                        <input type="text" id="ref-2-1" placeholder="1. ..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                        <input type="text" id="ref-2-2" placeholder="2. ..." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-2.5 text-xs text-slate-200 focus:outline-none focus:border-indigo-500">
+                    </div>
+                </div>
+
+                <!-- 1 Commitment -->
+                <div class="space-y-3">
+                    <h4 class="text-sm font-bold text-emerald-400 flex items-center gap-2">
+                        <span class="w-6 h-6 rounded-full bg-emerald-500/20 text-emerald-400 text-xs flex items-center justify-center">1</span>
+                        Satu (1) Komitmen Aksi Nyata Saya di Media Sosial:
+                    </h4>
+                    <input type="text" id="ref-1-1" placeholder="Contoh: Saya berjanji tidak akan pernah membagikan berita tanpa verifikasi fakta terlebih dahulu." class="w-full bg-slate-950 border border-slate-800 rounded-xl px-4 py-3 text-xs text-slate-200 focus:outline-none focus:border-emerald-500 font-semibold">
+                </div>
+
+                <button onclick="generateDigitalCommitmentCard()" class="w-full py-3.5 bg-gradient-to-r from-amber-500 to-indigo-600 hover:from-amber-400 hover:to-indigo-500 text-white font-bold text-xs rounded-xl shadow-lg transition">
+                    <i class="fa-solid fa-certificate me-1"></i> Buat Kartu Komitmen Digital Saya
+                </button>
+            </div>
+
+            <!-- Digital Commitment Badge Result Modal / View -->
+            <div id="commitment-card-output" class="hidden bg-slate-950 rounded-3xl border border-indigo-500/40 p-8 text-center space-y-4 shadow-2xl relative">
+                <div class="w-16 h-16 rounded-full bg-indigo-600/20 text-indigo-400 flex items-center justify-center mx-auto text-3xl">
+                    <i class="fa-solid fa-award"></i>
+                </div>
+                <h3 class="text-xl font-black text-white">KARTU KOMITMEN WARGA DIGITAL CERDAS</h3>
+                <p id="commit-text-display" class="text-sm italic text-slate-300 max-w-lg mx-auto bg-slate-900 p-4 rounded-2xl border border-slate-800">
+                    "..."
+                </p>
+                <p class="text-xs text-slate-500 font-mono">Diverifikasi oleh Platform Pembelajaran Informatika Class X</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- FOOTER -->
+    <footer class="bg-slate-950 border-t border-slate-800 py-6 text-center text-xs text-slate-500 no-print">
+        <div class="max-w-7xl mx-auto px-4 space-y-2">
+            <p>© 2026 Platform Literasi Digital Informatika X • Kurikulum Merdeka (Deep Learning Model)</p>
+            <p class="text-slate-600">Dirancang untuk Pembelajaran Interaktif 2 JP (Mindful, Meaningful, & Joyful)</p>
+        </div>
+    </footer>
+
+    <!-- JS INTERACTIVITY SCRIPTS -->
+    <script>
+        // TAB SWITCHING LOGIC
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/30');
+                btn.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.remove('hidden');
+            const activeBtn = document.getElementById(`tab-btn-${tabId}`);
+            activeBtn.classList.add('bg-indigo-600', 'text-white', 'shadow-lg', 'shadow-indigo-600/30');
+            activeBtn.classList.remove('text-slate-400');
+        }
+
+        // MATERI ACCORDION TOGGLE
+        function toggleAccordion(id) {
+            const content = document.getElementById(id);
+            const icon = document.getElementById(`${id}-icon`);
+            content.classList.toggle('hidden');
+            icon.classList.toggle('rotate-180');
+        }
+
+        // SOUND SYNTHESIZER (WEB AUDIO API - ZERO DEPENDENCY)
+        function playSound(type) {
+            try {
+                const ctx = new (window.AudioContext || window.webkitAudioContext)();
+                const osc = ctx.createOscillator();
+                const gain = ctx.createGain();
+                osc.connect(gain);
+                gain.connect(ctx.destination);
+
+                if (type === 'correct') {
+                    osc.frequency.setValueAtTime(523.25, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(880, ctx.currentTime + 0.15);
+                    gain.gain.setValueAtTime(0.15, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.15);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.15);
+                } else if (type === 'wrong') {
+                    osc.frequency.setValueAtTime(220, ctx.currentTime);
+                    osc.frequency.exponentialRampToValueAtTime(110, ctx.currentTime + 0.2);
+                    gain.gain.setValueAtTime(0.2, ctx.currentTime);
+                    gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.2);
+                    osc.start();
+                    osc.stop(ctx.currentTime + 0.2);
+                }
+            } catch(e) {}
+        }
+
+        // ==========================================
+        // LAB MAYA DIAGNOSTIC DATA & LOGIC
+        // ==========================================
+        const sampleData = {
+            1: {
+                title: "Pesan WhatsApp Undian Bank BCA",
+                badge: "BAHAYA PHISHING",
+                badgeColor: "bg-red-500/20 text-red-400 border border-red-500/30",
+                riskPercent: "95%",
+                barWidth: "95%",
+                content: "Selamat! Nomor Anda terpilih memenangkan Gebyar BCA Hadiah Rp 50.000.000,-. Klik tautan berikut untuk klaim voucher: https://gebyar-bca-hadiah2026.xyz/login",
+                flags: [
+                    "❌ Domain Menggunakan TLD Murah (.xyz) bukan domain resmi bca.co.id",
+                    "❌ Taktik Rekayasa Sosial (Iming-iming hadiah finansial cepat)",
+                    "❌ Meminta Klik Tautan Eksternal Tidak Terdaftar"
+                ],
+                recommendation: "Jangan pernah klik tautan! Blokir nomor pengirim dan abaikan pesan tersebut."
+            },
+            2: {
+                title: "Email Pemblokiran Akun Google",
+                badge: "INDIKASI HIGH RISK",
+                badgeColor: "bg-red-500/20 text-red-400 border border-red-500/30",
+                riskPercent: "88%",
+                barWidth: "88%",
+                content: "Dari: security-update@account-google-verify.net\nSubjek: Akun Anda Ditangguhkan!\n\nKami mendeteksi aktivitas mencurigakan. Klik link ini untuk verifikasi password dalam 24 jam atau akun dihapus permanen.",
+                flags: [
+                    "❌ Alamat Email Pengirim Palsu (@account-google-verify.net)",
+                    "❌ Memanfaatkan Rasa Takut / Urgensi Palsu (Ancaman 24 jam)",
+                    "❌ Meminta Verifikasi Password via Web Pihak Ketiga"
+                ],
+                recommendation: "Cek keamanan akun langsung melalui aplikasi resmi Google, bukan via link email."
+            },
+            3: {
+                title: "Berita Viral Kesehatan Sosmed",
+                badge: "HOAKS MEDIS",
+                badgeColor: "bg-amber-500/20 text-amber-400 border border-amber-500/30",
+                riskPercent: "75%",
+                barWidth: "75%",
+                content: "VIRALKAN! Dokter Jepang temukan bahwa minum air rebusan ketan hitam campur garam dapur bisa sembuhkan semua varian virus dalam 5 menit. Tolong dibagikan ke semua grup keluarga!",
+                flags: [
+                    "❌ Menggunakan Kalimat Provokatif ('VIRALKAN!', 'Tolong dibagikan')",
+                    "❌ Tidak Mencantumkan Sumber Jurnal Ilmiah / Riset Resmi",
+                    "❌ Klaim Medis Berlebihan Tanpa Uji Klinis"
+                ],
+                recommendation: "Cek kebenaran informasi kesehatan di situs Kemenkes atauTurnBackHoax.id."
+            }
+        };
+
+        function inspectSample(id) {
+            const data = sampleData[id];
+            document.getElementById('lab-empty-state').classList.add('hidden');
+            const resCard = document.getElementById('lab-result-card');
+            resCard.classList.remove('hidden');
+
+            document.getElementById('res-title').innerText = data.title;
+            const badge = document.getElementById('res-badge');
+            badge.innerText = data.badge;
+            badge.className = `px-4 py-1.5 rounded-full text-xs font-extrabold tracking-wide uppercase ${data.badgeColor}`;
+
+            document.getElementById('res-content').innerText = data.content;
+            document.getElementById('res-risk-percentage').innerText = data.riskPercent + " RISK";
+            document.getElementById('res-risk-bar').style.width = data.barWidth;
+
+            const flagsList = document.getElementById('res-flags-list');
+            flagsList.innerHTML = data.flags.map(f => `<div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-300 font-medium">${f}</div>`).join('');
+            
+            document.getElementById('res-recommendation').innerText = data.recommendation;
+        }
+
+        function analyzeCustomText() {
+            const val = document.getElementById('custom-input').value.trim();
+            if (!val) return;
+
+            document.getElementById('lab-empty-state').classList.add('hidden');
+            const resCard = document.getElementById('lab-result-card');
+            resCard.classList.remove('hidden');
+
+            const isPhishing = val.toLowerCase().includes('.apk') || val.toLowerCase().includes('http') || val.toLowerCase().includes('menang');
+            
+            document.getElementById('res-title').innerText = "Hasil Pemindaian Kustom";
+            const badge = document.getElementById('res-badge');
+            badge.innerText = isPhishing ? "POTENSI BAHAYA" : "PERLU VERIFIKASI";
+            badge.className = isPhishing ? "px-4 py-1.5 rounded-full text-xs font-extrabold bg-red-500/20 text-red-400 border border-red-500/30" : "px-4 py-1.5 rounded-full text-xs font-extrabold bg-amber-500/20 text-amber-400 border border-amber-500/30";
+
+            document.getElementById('res-content').innerText = val;
+            document.getElementById('res-risk-percentage').innerText = isPhishing ? "85% RISK" : "40% RISK";
+            document.getElementById('res-risk-bar').style.width = isPhishing ? "85%" : "40%";
+
+            document.getElementById('res-flags-list').innerHTML = `
+                <div class="p-2.5 rounded-xl bg-slate-950 border border-slate-800 text-slate-300">
+                    🔍 Pemindaian Algoritma: ${isPhishing ? 'Terdeteksi struktur kata kunci berisiko tinggi / tautan tidak dikenal.' : 'Teks memerlukan pencocokan fakta di database publik.'}
+                </div>
+            `;
+            document.getElementById('res-recommendation').innerText = "Terapkan saring sebelum sharing dan pastikan mengecek domain resmi.";
+        }
+
+        // ==========================================
+        // GAME EDUKASI LOGIC
+        // ==========================================
+        const gameCards = [
+            { text: "Pesan SMS: 'Pulsa Anda telah diisi Rp 100.000 dari nomor 0812xxx. Hubungi link bit.ly/kembalikan-pulsa'", isSafe: false, explanation: "Ini modus penipuan kuras pulsa / phishing!" },
+            { text: "Artikel berita dari Kompas.com tentang jadwal resmi libur nasional dari Pemerintah.", isSafe: true, explanation: "Aman! Bersumber dari media utama terverifikasi Dewan Pers." },
+            { text: "Pesan WA: 'File SURAT_UNDANGAN_PERNIKAHAN.apk disertai permintaan install'.", isSafe: false, explanation: "Bahaya! Ini Malware sniffing peretas data OTP bank." },
+            { text: "Email dari noreply@github.com memverifikasi pendaftaran akun baru kamu.", isSafe: true, explanation: "Aman! Domain pengirim resmi dari GitHub." },
+            { text: "Post Instagram: 'Bagi-bagi iPhone 15 gratis cukup isi nomor rekening dan OTP kamu di sini'.", isSafe: false, explanation: "Hoaks & Phishing! Jangan pernah beri kode OTP ke siapa pun." }
+        ];
+
+        let currentCardIndex = 0;
+        let score = 0;
+        let lives = 3;
+        let combo = 0;
+        let gameActive = false;
+
+        function startGame() {
+            score = 0;
+            lives = 3;
+            combo = 0;
+            currentCardIndex = 0;
+            gameActive = true;
+            document.getElementById('game-score').innerText = score;
+            document.getElementById('game-lives').innerText = lives;
+            document.getElementById('game-combo').innerText = '0x';
+            document.getElementById('btn-hoax').disabled = false;
+            document.getElementById('btn-fakta').disabled = false;
+            document.getElementById('btn-start-game').innerText = "Reset / Ulangi Game";
+            renderGameCard();
+        }
+
+        function renderGameCard() {
+            if (currentCardIndex >= gameCards.length) {
+                // WIN CONDITION
+                confetti({ particleCount: 100, spread: 70, origin: { y: 0.6 } });
+                document.getElementById('card-text').innerHTML = `🎉 <strong>Luar Biasa!</strong> Kamu berhasil menyelesaikan semua tantangan dengan skor akhir: <span class="text-amber-400 font-bold">${score}</span>`;
+                document.getElementById('btn-hoax').disabled = true;
+                document.getElementById('btn-fakta').disabled = true;
+                gameActive = false;
+                return;
+            }
+
+            const card = gameCards[currentCardIndex];
+            document.getElementById('card-text').innerText = card.text;
+            document.getElementById('game-feedback').classList.add('hidden');
+        }
+
+        function submitChoice(userChoiceIsSafe) {
+            if (!gameActive) return;
+
+            const card = gameCards[currentCardIndex];
+            const isCorrect = (userChoiceIsSafe === card.isSafe);
+            const feedbackEl = document.getElementById('game-feedback');
+            feedbackEl.classList.remove('hidden', 'bg-emerald-500/20', 'text-emerald-300', 'bg-red-500/20', 'text-red-300');
+
+            if (isCorrect) {
+                playSound('correct');
+                score += 20 + (combo * 5);
+                combo++;
+                feedbackEl.classList.add('bg-emerald-500/20', 'text-emerald-300');
+                feedbackEl.innerText = `✅ BENAR! ${card.explanation}`;
+            } else {
+                playSound('wrong');
+                lives--;
+                combo = 0;
+                feedbackEl.classList.add('bg-red-500/20', 'text-red-300');
+                feedbackEl.innerText = `❌ SALAH! ${card.explanation}`;
+            }
+
+            document.getElementById('game-score').innerText = score;
+            document.getElementById('game-lives').innerText = lives;
+            document.getElementById('game-combo').innerText = `${combo}x`;
+
+            if (lives <= 0) {
+                document.getElementById('card-text').innerHTML = `💥 <strong>Game Over!</strong> Kamu kehabisan nyawa. Coba lagi untuk mengasah kewaspadaanmu!`;
+                document.getElementById('btn-hoax').disabled = true;
+                document.getElementById('btn-fakta').disabled = true;
+                gameActive = false;
+                return;
+            }
+
+            currentCardIndex++;
+            setTimeout(renderGameCard, 2200);
+        }
+
+        // ==========================================
+        // LKPD EVALUATION & PRINT LOGIC
+        // ==========================================
+        function evaluateLKPD() {
+            const nama = document.getElementById('lkpd-nama').value.trim();
+            if (!nama) {
+                alert("Harap isi Nama Lengkap terlebih dahulu pada formulir LKPD!");
+                return;
+            }
+
+            // Check Answers
+            const q1 = document.querySelector('input[name="q1"]:checked');
+            const q2 = document.querySelector('input[name="q2"]:checked');
+
+            let scoreLKPD = 0;
+            if (q1 && q1.value === 'B') scoreLKPD += 50;
+            if (q2 && q2.value === 'B') scoreLKPD += 50;
+
+            const scoreDisplay = document.getElementById('lkpd-score-result');
+            scoreDisplay.classList.remove('hidden');
+            scoreDisplay.innerText = `Evaluasi Otomatis PG: ${scoreLKPD}/100 • Jawaban Esai Tersimpan`;
+
+            confetti({ particleCount: 50, spread: 50 });
+        }
+
+        function printLKPD() {
+            const nama = document.getElementById('lkpd-nama').value.trim();
+            if (!nama) {
+                alert("Mohon lengkapi Nama Siswa sebelum mencetak LKPD.");
+                return;
+            }
+            window.print();
+        }
+
+        // ==========================================
+        // REFLEKSI 3-2-1 LOGIC
+        // ==========================================
+        let selectedMood = '';
+        function selectMood(mood) {
+            selectedMood = mood;
+            playSound('correct');
+            document.querySelectorAll('.mood-btn').forEach(b => b.classList.remove('bg-indigo-600/30', 'border-indigo-500'));
+            event.currentTarget.classList.add('bg-indigo-600/30', 'border-indigo-500');
+        }
+
+        function generateDigitalCommitmentCard() {
+            const commitText = document.getElementById('ref-1-1').value.trim();
+            if (!commitText) {
+                alert("Mohon isi 1 Komitmen Aksi Nyata Kamu!");
+                return;
+            }
+
+            const output = document.getElementById('commitment-card-output');
+            output.classList.remove('hidden');
+            document.getElementById('commit-text-display').innerText = `"${commitText}"`;
+            
+            confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
+        }
+    </script>
+</body>
+</html>
